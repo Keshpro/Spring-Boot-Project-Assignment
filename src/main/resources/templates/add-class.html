@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Class</title>
+</head>
+<body>
+<div style="text-align: center; margin-top: 50px;">
+    <h2>Edit Class Details</h2>
+
+    <form th:action="@{/classes/update/{id}(id=${gymClass.id})}" th:object="${gymClass}" method="post">
+        <div>
+            <label>Class Name:</label><br>
+            <input type="text" th:field="*{name}" required/>
+        </div>
+        <br>
+        <div>
+            <label>Instructor:</label><br>
+            <input type="text" th:field="*{instructor}" required/>
+        </div>
+        <br>
+        <div>
+            <label>Schedule Time:</label><br>
+            <input type="text" th:field="*{scheduleTime}" required/>
+        </div>
+        <br>
+        <div>
+            <label>Max Capacity:</label><br>
+            <input type="number" th:field="*{maxCapacity}" required/>
+        </div>
+        <br>
+        <button type="submit" style="background-color: orange;">Update Class</button>
+    </form>
+
+    <br>
+    <a href="/classes">Cancel</a>
+</div>
+</body>
+</html>
