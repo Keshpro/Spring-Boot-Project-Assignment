@@ -1,6 +1,6 @@
 package com.gym.management.controller;
 
-import com.gym.management.entity.User; // <--- මේක තමයි අඩු වෙලා තිබුනේ
+import com.gym.management.entity.User;
 import com.gym.management.repository.AttendanceRepository;
 import com.gym.management.repository.PaymentRepository;
 import com.gym.management.repository.UserRepository;
@@ -20,9 +20,8 @@ public class HomeController {
     private final UserRepository userRepository;
     private final AttendanceRepository attendanceRepository;
     private final PaymentRepository paymentRepository;
-    private final PasswordEncoder passwordEncoder; // Password වෙනස් කරන්න ඕන වෙනවා
+    private final PasswordEncoder passwordEncoder;
 
-    // Constructor එක (User, Attendance, Payment සහ PasswordEncoder එක්ක)
     public HomeController(UserRepository userRepository, AttendanceRepository attendanceRepository, PaymentRepository paymentRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.attendanceRepository = attendanceRepository;
@@ -32,18 +31,13 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        // 1. මුළු සාමාජිකයින් ගණන
         model.addAttribute("totalMembers", userRepository.count());
-
-        // 2. අද පැමිණීම (Today's Attendance)
         model.addAttribute("todayAttendance", attendanceRepository.countByDate(LocalDate.now()));
 
-        // 3. මේ මාසයේ ආදායම (Monthly Income)
         String currentMonth = LocalDate.now().getMonth().toString() + " " + LocalDate.now().getYear();
-        Double monthlyIncome = paymentRepository.getTotalIncomeByMonth("January 2025"); // අවශ්‍ය නම් currentMonth දාන්න
+        Double monthlyIncome = paymentRepository.getTotalIncomeByMonth(currentMonth);
         model.addAttribute("monthlyIncome", monthlyIncome != null ? monthlyIncome : 0.0);
 
-        // 4. අද ආදායම
         Double todayIncome = paymentRepository.getTotalIncomeToday(LocalDate.now());
         model.addAttribute("todayIncome", todayIncome != null ? todayIncome : 0.0);
 
@@ -55,14 +49,9 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/register")
-    public String register() {
-        return "register";
-    }
+    // 🛑 NOTE: මෙතන තිබ්බ Register Methods දෙකම අයින් කළා.
 
     // --- PROFILE SECTION ---
-
-    // 1. Profile Page එක පෙන්වීම
     @GetMapping("/profile")
     public String viewProfile(Model model, java.security.Principal principal) {
         String username = principal.getName();
@@ -71,14 +60,13 @@ public class HomeController {
         return "profile";
     }
 
-    // 2. Profile Update කිරීම
     @PostMapping("/profile/update")
     public String updateProfile(@ModelAttribute User user, @RequestParam(required = false) String newPassword, java.security.Principal principal) {
         User currentUser = userRepository.findByUsername(principal.getName()).orElse(null);
 
         if (currentUser != null) {
             currentUser.setUsername(user.getUsername());
-            currentUser.setEmail(user.getEmail());
+            currentUser.setPhoneNumber(user.getPhoneNumber());
 
             if (newPassword != null && !newPassword.isEmpty()) {
                 currentUser.setPassword(passwordEncoder.encode(newPassword));
