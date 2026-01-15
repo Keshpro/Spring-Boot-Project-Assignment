@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Classes - FlexGym</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-success"><i class="bi bi-calendar-check-fill"></i> Manage Classes</h2>
+        <div>
+            <a href="/admin/classes/add" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Add New Class
+            </a>
+            <a href="/" class="btn btn-secondary">Dashboard</a>
+        </div>
+    </div>
+
+    <div th:if="${param.success}" class="alert alert-success">Class saved successfully!</div>
+    <div th:if="${param.deleted}" class="alert alert-danger">Class deleted successfully!</div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                <tr>
+                    <th>Class Name</th>
+                    <th>Instructor</th>
+                    <th>Schedule / Time</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cls : ${classes}">
+                    <td class="fw-bold" th:text="${cls.name}">Zumba</td>
+                    <td th:text="${cls.instructor}">Trainer Name</td>
+                    <td><span class="badge bg-info text-dark" th:text="${cls.schedule}">Mon 8AM</span></td>
+                    <td th:text="${cls.description}">Description</td>
+                    <td>
+                        <a th:href="@{/admin/classes/delete/{id}(id=${cls.id})}"
+                           class="btn btn-danger btn-sm" onclick="return confirm('Delete this class?');">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${classes.empty}">
+                    <td colspan="5" class="text-center py-4 text-muted">No classes found. Add a new one!</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
