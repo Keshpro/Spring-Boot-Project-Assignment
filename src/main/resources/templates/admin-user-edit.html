@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit User - FlexGym</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 500px;">
+        <div class="card-header bg-primary text-white">
+            <h4><i class="bi bi-pencil-square"></i> Edit User Details</h4>
+        </div>
+        <div class="card-body">
+
+            <form th:action="@{/admin/users/update/{id}(id=${user.id})}" th:object="${user}" method="post">
+
+                <input type="hidden" th:field="*{id}">
+
+                <div class="mb-3">
+                    <label>Username</label>
+                    <input type="text" th:field="*{username}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Phone Number</label>
+                    <input type="text" th:field="*{phoneNumber}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Role</label>
+                    <select th:field="*{role}" class="form-select">
+                        <option value="USER">USER (Member)</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Update User</button>
+                    <a href="/admin/users" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
