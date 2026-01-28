@@ -1,34 +1,249 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Member Check-In</title>
+    <title>Check-In - IRON MUSCLE BEAST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+            url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+
+        .checkin-card {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(15px);
+            border: 2px solid #dc3545;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(220, 53, 69, 0.4);
+            width: 100%;
+            max-width: 650px;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Home Button Style - Dashboard Link */
+        .btn-home {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #666;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            background: rgba(0,0,0,0.3); /* පොඩි පසුබිමක් දැම්මා පේන්න ලේසි වෙන්න */
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .btn-home:hover {
+            color: #dc3545;
+            background: rgba(0,0,0,0.8);
+            transform: scale(1.1);
+        }
+
+        .brand-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .brand-subtitle {
+            color: #dc3545;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 40px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        /* --- INPUT FIELD --- */
+        .checkin-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #555;
+            color: #fff;
+            height: 80px;
+            font-size: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .checkin-input:focus {
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border-color: #dc3545;
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.5);
+            outline: none;
+        }
+
+        .checkin-input::placeholder {
+            color: #888;
+            font-size: 1.2rem;
+            letter-spacing: normal;
+            text-transform: uppercase;
+        }
+
+        /* --- BUTTON --- */
+        .btn-checkin {
+            background: #dc3545;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .btn-checkin:hover {
+            background: #bb2d3b;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(220, 53, 69, 0.6);
+        }
+
+        /* --- ALERTS --- */
+        .alert-beast-success {
+            background: rgba(25, 135, 84, 0.2);
+            border: 2px solid #198754;
+            color: #2ecc71;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            animation: popIn 0.5s ease;
+        }
+
+        .alert-beast-error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 2px solid #dc3545;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .footer-text {
+            position: absolute;
+            bottom: 20px;
+            color: #666;
+            font-size: 0.8rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        .progress-bar-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: #dc3545;
+            width: 0%;
+            transition: width 1s linear;
+        }
+    </style>
 </head>
-<body class="bg-dark text-white d-flex align-items-center justify-content-center" style="height: 100vh;">
+<body>
 
-<div class="card bg-secondary text-white shadow-lg p-4" style="max-width: 400px; width: 100%;">
-    <h3 class="text-center mb-4">Gym Check-In</h3>
+<div class="checkin-card">
+    <a th:href="@{/admin/dashboard}" class="btn-home" title="Go to Dashboard">
+        <i class="bi bi-speedometer2"></i> </a>
 
-    <div th:if="${param.success}" class="alert alert-success text-center text-dark">
-        <strong>Welcome!</strong> Attendance Marked.
-    </div>
+    <div class="brand-title">IRON MUSCLE</div>
+    <div class="brand-subtitle">MEMBER CHECK-IN</div>
 
-    <div th:if="${param.error}" class="alert alert-danger text-center text-dark">
-        User not found! Try again.
-    </div>
-
-    <form action="/checkin/mark" method="post">
-        <div class="mb-3">
-            <label class="form-label">Phone Number or Username</label>
-            <input type="text" name="identifier" class="form-control" placeholder="Enter Phone or Name" required>
+    <div th:if="${param.success}" class="alert-beast-success">
+        <i class="bi bi-check-circle-fill display-4 d-block mb-2"></i>
+        <div>WELCOME TO THE BEAST MODE!</div>
+        <div style="font-size: 0.9rem; color: #fff; margin-top:5px;" th:if="${param.name}">
+            Let's crush it, <span th:text="${param.name}">User</span>!
         </div>
-        <button type="submit" class="btn btn-warning w-100 fw-bold">Mark Attendance</button>
+        <div class="mt-2" style="font-size: 0.8rem; color: #aaa;">Screen will refresh automatically...</div>
+    </div>
+
+    <div th:if="${param.error}" class="alert-beast-error">
+        <i class="bi bi-x-circle-fill display-4 d-block mb-2"></i>
+        USER NOT FOUND!
+        <div style="font-size: 0.9rem; color: #fff; margin-top:5px;">Please check Name or Number.</div>
+        <div class="mt-2" style="font-size: 0.8rem; color: #aaa;">Screen will refresh automatically...</div>
+    </div>
+
+    <form th:action="@{/checkin/mark}" method="post">
+        <input type="text" name="identifier" id="checkinInput" class="form-control checkin-input" placeholder="ENTER NAME OR PHONE NUMBER" required autofocus autocomplete="off">
+        <button class="btn btn-checkin">MARK ATTENDANCE</button>
     </form>
 
-    <div class="text-center mt-3">
-        <a href="/" class="text-light text-decoration-none"><small>Back to Home</small></a>
+    <div class="mt-4 text-white-50">
+        <small>Type your name or phone number to start</small>
     </div>
+
+    <div id="redirectProgress" class="progress-bar-container"></div>
 </div>
+
+<div class="footer-text">POWERED BY IRON MUSCLE SYSTEM</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.has('success') || urlParams.has('error')) {
+        const inputField = document.getElementById('checkinInput');
+        const progressBar = document.getElementById('redirectProgress');
+
+        if(inputField) inputField.focus();
+
+        setTimeout(() => {
+            progressBar.style.width = "100%";
+            progressBar.style.transition = "width 5s linear";
+        }, 100);
+
+        setTimeout(function() {
+            window.location.href = '/checkin';
+        }, 5000);
+    }
+</script>
 
 </body>
 </html>

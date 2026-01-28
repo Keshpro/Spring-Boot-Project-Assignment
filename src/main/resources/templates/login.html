@@ -1,36 +1,167 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login - FlexGym</title>
+    <title>Login - IRON MUSCLE BEAST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
-        body { background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .card { width: 100%; max-width: 400px; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        body {
+            /* --- BACKGROUND IMAGE SETTING --- */
+            /*
+               1. rgba(0, 0, 0, 0.7) - මේකෙන් පින්තූරය උඩට කළු පාට ලේයර් එකක් වැටෙනවා (Overlay). අගය 0.1 සිට 0.9 දක්වා වෙනස් කරලා අඳුරු ගතිය වෙනස් කරන්න පුළුවන්.
+               2. url('...') - මෙතනට ඔයා කැමති ජිම් එකේ ෆොටෝ එකේ ලින්ක් එක දාන්න. මම දැනට අන්තර්ජාලයෙන් ගත්තු එකක් දැම්මා.
+            */
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+            url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+
+            /* පින්තූරය ස්ක්‍රීන් එක පුරාම විහිදෙන්න සහ මැදට වෙන්න */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Scroll වෙද්දී පින්තූරය හෙලවෙන්නේ නෑ */
+
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+
+        /* පසුබිමට ලා රතු එළියක් (Optional Glow Effect) */
+        .glow-bg {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220, 53, 69, 0.3) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: 0;
+            opacity: 0.6; /* පින්තූරය උඩින් එන නිසා එළිය ටිකක් අඩු කළා */
+        }
+
+        .login-card {
+            /* කාඩ් එකේ පසුබිම ටිකක් විනිවිද පේන විදියට (Glass effect) */
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(10px); /* පසුබිම බොඳ වෙන්න */
+            border: 2px solid #dc3545;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); /* සෙවනැල්ල වැඩි කළා */
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .brand-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .brand-subtitle {
+            color: #dc3545;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            letter-spacing: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .form-control {
+            background: rgba(43, 43, 43, 0.8); /* Input field ටිකක් විනිවිද පේන්න */
+            border: 1px solid #444;
+            color: #fff;
+            height: 50px;
+            padding-left: 45px;
+        }
+
+        .form-control:focus {
+            background: rgba(43, 43, 43, 1);
+            color: #fff;
+            border-color: #dc3545;
+            box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 13px;
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        .btn-beast {
+            background: #dc3545;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            height: 50px;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-beast:hover {
+            background: #bb2d3b;
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(220, 53, 69, 0.8);
+        }
+
+        .alert-custom {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid #dc3545;
+            color: #ff6b6b;
+            font-size: 0.9rem;
+        }
+
+        /* Placeholder text color */
+        ::placeholder {
+            color: #888 !important;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
 
-<div class="card p-4">
-    <h3 class="text-center text-primary mb-4">💪 Login to FlexGym</h3>
+<div class="glow-bg"></div>
 
-    <div th:if="${param.error}" class="alert alert-danger text-center">Invalid username or password.</div>
-    <div th:if="${param.logout}" class="alert alert-success text-center">You have been logged out.</div>
+<div class="login-card">
+    <div class="brand-title">IRON MUSCLE</div>
+    <div class="brand-subtitle">BEAST GYM</div>
+
+    <div th:if="${param.error}" class="alert alert-custom text-center py-2 mb-4">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> Username හෝ Password වැරදියි!
+    </div>
+    <div th:if="${param.logout}" class="alert alert-success text-center py-2 mb-4" style="background: rgba(25, 135, 84, 0.2); border-color: #198754; color: #75b798;">
+        <i class="bi bi-check-circle-fill me-2"></i> Successfully Logout
+    </div>
 
     <form th:action="@{/login}" method="post">
-        <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" placeholder="Enter username" required/>
+        <div class="mb-4 position-relative">
+            <i class="bi bi-person-fill input-icon"></i>
+            <input type="text" name="username" class="form-control" placeholder="USERNAME" required autofocus autocomplete="off">
         </div>
-        <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Enter password" required/>
+
+        <div class="mb-4 position-relative">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input type="password" name="password" class="form-control" placeholder="PASSWORD" required>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Login</button>
+
+        <button type="submit" class="btn btn-beast w-100">Login to System</button>
     </form>
 
-    <p class="text-center mt-3">
-        New member? <a href="/register" class="text-decoration-none">Register here</a>
-    </p>
+    <div class="text-center mt-3">
+        <small class="text-secondary">© 2026 Iron Muscle Beast BY KreativeLabs</small>
+    </div>
 </div>
 
 </body>
