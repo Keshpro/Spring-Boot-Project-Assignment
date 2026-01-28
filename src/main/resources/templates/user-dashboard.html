@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Dashboard - IRON MUSCLE BEAST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            background-color: #0a0a0a; /* ඊටත් වඩා තද කළු පසුබිමක් */
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            padding-bottom: 80px;
+        }
+
+        /* --- HEADER SECTION --- */
+        .user-header {
+            background: linear-gradient(135deg, #dc3545 0%, #1a1a1a 100%);
+            padding: 40px 20px 50px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .welcome-text { font-size: 1rem; opacity: 0.9; letter-spacing: 2px; text-transform: uppercase; color: #f0f0f0; }
+        .user-name { font-family: 'Oswald', sans-serif; font-size: 2.8rem; font-weight: 700; text-transform: uppercase; margin: 10px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); letter-spacing: 1px; }
+
+        .workout-badge {
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-edit-profile {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: #dc3545;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            font-family: 'Oswald', sans-serif; letter-spacing: 1px;
+        }
+        .btn-edit-profile:hover { transform: translateX(-50%) translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); color: #dc3545; }
+
+        /* --- COMMON CARD STYLE --- */
+        .content-card {
+            background: #1e1e1e;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border: 1px solid #333;
+            transition: transform 0.3s ease;
+        }
+        .content-card:hover { transform: translateY(-2px); }
+        .card-header-title {
+            font-family: 'Oswald', sans-serif;
+            color: #dc3545;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 1px;
+        }
+        .card-header-title i { margin-right: 12px; font-size: 1.5rem; }
+
+        /* --- PHYSICAL STATS --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 0 15px;
+        }
+        .stat-item { text-align: center; padding: 10px; }
+        .stat-value { font-family: 'Oswald', sans-serif; font-size: 2.2rem; font-weight: 700; color: #fff; line-height: 1; }
+        .stat-unit { font-size: 1rem; color: #dc3545; font-weight: bold; margin-left: 5px; }
+        .stat-label { font-size: 0.9rem; color: #aaa; text-transform: uppercase; margin-top: 8px; letter-spacing: 1px; }
+
+        /* --- INFO ROWS --- */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #333;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #bbb; font-size: 1rem; font-weight: 500; }
+        .info-value { color: #fff; font-weight: 700; font-size: 1.1rem; }
+        .text-emergency { color: #ffc107; } /* Yellow for emergency */
+
+        /* --- PAYMENT STATUS --- */
+        .payment-card {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            border-left: 5px solid #28a745;
+        }
+        .status-badge {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: 1px solid #28a745;
+        }
+
+        /* --- DIGITAL ID --- */
+        .digital-id-card {
+            background: linear-gradient(135deg, #141414 0%, #222 100%);
+            border: 1px solid #444;
+            position: relative;
+            overflow: hidden;
+        }
+        .id-number { font-family: 'Oswald', sans-serif; font-size: 1.8rem; letter-spacing: 3px; color: #fff; margin-top: 5px; }
+        .qr-icon { font-size: 4rem; color: #fff; opacity: 0.8; }
+
+        /* --- LOGOUT --- */
+        .btn-logout {
+            background: transparent;
+            color: #888;
+            border: 2px solid #333;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .btn-logout:hover { background: #dc3545; border-color: #dc3545; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="user-header">
+    <div class="welcome-text">WELCOME BACK,</div>
+    <div class="user-name" th:text="${user.username}">USER NAME</div>
+
+    <div class="workout-badge">
+        <i class="bi bi-fire me-2 text-danger"></i>
+        <span th:text="${attendanceCount}">0</span> DAYS WORKOUT STREAK
+    </div>
+
+    <a th:href="@{/user/profile}" class="btn-edit-profile">
+        <i class="bi bi-pencil-fill me-2"></i> UPDATE DETAILS
+    </a>
+</div>
+
+<div class="container" style="max-width: 800px;">
+
+    <div class="content-card">
+        <div class="card-header-title"><i class="bi bi-bar-chart-fill"></i>PHYSICAL STATS</div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value"><span th:text="${user.weight != null ? user.weight : '-'}">0</span><span class="stat-unit">KG</span></div>
+                <div class="stat-label">Weight</div>
+            </div>
+            <div class="stat-item" style="border-left: 1px solid #333; border-right: 1px solid #333;">
+                <div class="stat-value"><span th:text="${user.height != null ? user.height : '-'}">0</span><span class="stat-unit">CM</span></div>
+                <div class="stat-label">Height</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><span th:text="${user.age != null ? user.age : '-'}">0</span><span class="stat-unit">YRS</span></div>
+                <div class="stat-label">Age</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card" th:if="${user.emergencyContact != null or user.healthStatus != null}">
+        <div class="card-header-title"><i class="bi bi-heart-pulse-fill"></i>MEDICAL & EMERGENCY</div>
+
+        <div class="info-row" th:if="${user.emergencyContact != null and user.emergencyContact != ''}">
+            <span class="info-label"><i class="bi bi-telephone-fill me-2"></i>Emergency Contact</span>
+            <span class="info-value text-emergency" th:text="${user.emergencyContact}">-</span>
+        </div>
+
+        <div class="info-row" th:if="${user.healthStatus != null and user.healthStatus != ''}" style="display: block;">
+            <div class="info-label mb-2"><i class="bi bi-clipboard2-pulse-fill me-2"></i>Health Notes:</div>
+            <div class="info-value text-start" style="font-size: 1rem; font-weight: 400; color: #ddd; line-height: 1.5;" th:text="${user.healthStatus}">None</div>
+        </div>
+    </div>
+
+    <div class="content-card payment-card">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="card-header-title mb-0 text-success"><i class="bi bi-credit-card-2-front-fill"></i>PAYMENT STATUS</div>
+            <span class="status-badge"><i class="bi bi-check-circle-fill me-2"></i>PAID</span>
+        </div>
+    </div>
+
+    <div class="content-card digital-id-card">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="card-header-title mb-1"><i class="bi bi-person-badge-fill"></i>IRON MUSCLE ID</div>
+                <div style="font-size: 0.9rem; color: #888; letter-spacing: 1px;">PHONE NUMBER / ID</div>
+                <div class="id-number" th:text="${user.phoneNumber}">07XXXXXXXX</div>
+            </div>
+            <div class="text-end">
+                <i class="bi bi-qr-code-scan qr-icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5 mb-4">
+        <form th:action="@{/logout}" method="post">
+            <button class="btn-logout">
+                <i class="bi bi-box-arrow-left me-2"></i> SECURE LOGOUT
+            </button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

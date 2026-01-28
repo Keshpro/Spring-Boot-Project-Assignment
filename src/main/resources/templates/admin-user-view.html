@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Member Profile - IRON MUSCLE BEAST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Roboto', sans-serif; }
+
+        /* Sidebar Styles (Copy from other admin pages) */
+        .sidebar { height: 100vh; width: 250px; position: fixed; top: 0; left: 0; background-color: #000; border-right: 2px solid #dc3545; padding-top: 20px; z-index: 1000; }
+        .brand-title { font-family: 'Oswald', sans-serif; color: #fff; font-size: 1.8rem; text-align: center; }
+        .brand-subtitle { color: #dc3545; font-size: 0.8rem; text-align: center; margin-bottom: 20px; letter-spacing: 3px; }
+        .nav-link { color: #b3b3b3; padding: 15px 25px; display: flex; align-items: center; text-decoration: none; }
+        .nav-link i { margin-right: 15px; color: #dc3545; }
+        .nav-link:hover { background-color: #1a1a1a; color: #fff; border-left: 4px solid #dc3545; }
+
+        /* Main Content */
+        .main-content { margin-left: 250px; padding: 40px; display: flex; justify-content: center; }
+
+        /* Profile Card */
+        .profile-card {
+            background: #1e1e1e;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+
+        .card-header-section {
+            background: linear-gradient(135deg, #dc3545 0%, #000 100%);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .profile-name { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: bold; color: #fff; text-transform: uppercase; margin: 0; }
+        .profile-phone { color: rgba(255,255,255,0.8); font-size: 1.1rem; letter-spacing: 1px; }
+
+        .card-body-section { padding: 30px; }
+
+        /* Info Grid */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .info-box { background: #2b2b2b; padding: 15px; border-radius: 10px; border: 1px solid #444; }
+        .info-label { color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .info-value { color: #fff; font-size: 1.2rem; font-weight: bold; font-family: 'Oswald', sans-serif; }
+
+        .emergency-box {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid #dc3545;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-back { display: block; width: 100%; text-align: center; background: #333; color: #fff; padding: 15px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .btn-back:hover { background: #444; color: #fff; }
+
+        @media (max-width: 768px) {
+            .sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 2px solid #dc3545; }
+            .main-content { margin-left: 0; padding: 20px; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="brand-title">IRON MUSCLE</div><div class="brand-subtitle">BEAST GYM</div>
+    <nav class="nav flex-column d-flex flex-row flex-md-column justify-content-center">
+        <a th:href="@{/admin/dashboard}" class="nav-link"><i class="bi bi-speedometer2"></i> <span class="d-none d-md-inline ms-2">Dashboard</span></a>
+        <a th:href="@{/admin/users}" class="nav-link active"><i class="bi bi-people-fill"></i> <span class="d-none d-md-inline ms-2">Members</span></a>
+        <a th:href="@{/admin/payments}" class="nav-link"><i class="bi bi-cash-stack"></i> <span class="d-none d-md-inline ms-2">Payments</span></a>
+        <a th:href="@{/checkin}" target="_blank" class="nav-link"><i class="bi bi-qr-code-scan"></i> <span class="d-none d-md-inline ms-2">Check-In</span></a>
+    </nav>
+</div>
+
+<div class="main-content">
+
+    <div class="profile-card">
+        <div class="card-header-section">
+            <i class="bi bi-person-circle display-1 text-white mb-2"></i>
+            <h2 class="profile-name" th:text="${user.username}">User Name</h2>
+            <div class="profile-phone"><i class="bi bi-telephone-fill me-2"></i><span th:text="${user.phoneNumber}">07XXXXXXXX</span></div>
+        </div>
+
+        <div class="card-body-section">
+
+            <h5 class="text-secondary border-bottom border-secondary pb-2 mb-3">PHYSICAL DETAILS</h5>
+            <div class="info-grid">
+                <div class="info-box">
+                    <div class="info-label">Weight</div>
+                    <div class="info-value"><span th:text="${user.weight != null ? user.weight : '-'}"></span> KG</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Height</div>
+                    <div class="info-value"><span th:text="${user.height != null ? user.height : '-'}"></span> CM</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Age</div>
+                    <div class="info-value"><span th:text="${user.age != null ? user.age : '-'}"></span> YRS</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Joined Date</div>
+                    <div class="info-value">2024</div> </div>
+            </div>
+
+            <div class="emergency-box" th:if="${user.emergencyContact != null or user.healthStatus != null}">
+                <h5 class="text-danger mb-3"><i class="bi bi-hospital-fill me-2"></i>MEDICAL & EMERGENCY</h5>
+
+                <div class="mb-3" th:if="${user.emergencyContact != null and user.emergencyContact != ''}">
+                    <div class="info-label text-white">Emergency Contact:</div>
+                    <div class="fs-5 fw-bold text-warning" th:text="${user.emergencyContact}">-</div>
+                </div>
+
+                <div th:if="${user.healthStatus != null and user.healthStatus != ''}">
+                    <div class="info-label text-white">Health Conditions / Notes:</div>
+                    <div class="text-light" th:text="${user.healthStatus}">None</div>
+                </div>
+            </div>
+
+        </div>
+
+        <a th:href="@{/admin/users}" class="btn-back"><i class="bi bi-arrow-left me-2"></i> BACK TO LIST</a>
+    </div>
+
+</div>
+
+</body>
+</html>

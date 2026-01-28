@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard - IRON MUSCLE BEAST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #000000;
+            border-right: 2px solid #dc3545;
+            padding-top: 20px;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .brand-section {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .brand-title {
+            font-family: 'Oswald', sans-serif;
+            color: #ffffff;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .brand-subtitle {
+            color: #dc3545;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+        }
+
+        .nav-link {
+            color: #b3b3b3;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link i {
+            margin-right: 15px;
+            font-size: 1.3rem;
+            color: #dc3545;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border-left: 4px solid #dc3545;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .header-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        /* --- STAT CARDS --- */
+        .stat-card {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border-bottom: 3px solid #dc3545;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stat-label {
+            color: #888;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- QUICK ACTIONS --- */
+        .action-btn {
+            background: #2b2b2b;
+            color: white;
+            border: 1px solid #444;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .action-btn i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+            color: #dc3545;
+        }
+
+        .action-btn:hover i {
+            color: #fff;
+        }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px solid #dc3545;
+                padding-bottom: 10px;
+            }
+
+            .nav-link {
+                padding: 10px;
+                justify-content: center;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .header-title {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="brand-section">
+        <div class="brand-title">IRON MUSCLE</div>
+        <div class="brand-subtitle">BEAST GYM</div>
+    </div>
+
+    <nav class="nav flex-column d-flex flex-row flex-md-column flex-wrap justify-content-center">
+        <a th:href="@{/admin/dashboard}" class="nav-link active">
+            <i class="bi bi-speedometer2"></i>
+            <span class="d-none d-md-inline ms-2">Dashboard</span>
+        </a>
+
+        <a th:href="@{/admin/users}" class="nav-link">
+            <i class="bi bi-people-fill"></i>
+            <span class="d-none d-md-inline ms-2">Members</span>
+        </a>
+
+        <a th:href="@{/admin/payments}" class="nav-link">
+            <i class="bi bi-cash-stack"></i>
+            <span class="d-none d-md-inline ms-2">Payments</span>
+        </a>
+
+        <a th:href="@{/checkin}" target="_blank" class="nav-link">
+            <i class="bi bi-qr-code-scan"></i>
+            <span class="d-none d-md-inline ms-2">Check-In</span>
+        </a>
+
+        <div class="px-3 mt-3 d-none d-md-block w-100">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-outline-danger w-100">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
+        </div>
+
+        <div class="d-md-none p-2">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </nav>
+</div>
+
+<div class="main-content">
+    <h2 class="header-title">Dashboard Overview</h2>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <i class="bi bi-people-fill stat-icon"></i>
+                <div class="stat-value" th:text="${totalMembers}">0</div>
+                <div class="stat-label">Total Members</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <i class="bi bi-calendar-check stat-icon"></i>
+                <div class="stat-value" th:text="${todayAttendance}">0</div>
+                <div class="stat-label">Today's Check-ins</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <i class="bi bi-wallet2 stat-icon"></i>
+                <div class="stat-value" th:text="'LKR ' + ${monthlyIncome}">0</div>
+                <div class="stat-label">Monthly Income</div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-4" style="color: #dc3545; font-family: 'Oswald', sans-serif;">Quick Actions</h4>
+    <div class="row g-4">
+        <div class="col-md-3">
+            <a th:href="@{/admin/users/add}" class="action-btn">
+                <i class="bi bi-person-plus-fill"></i>
+                Add New Member
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a th:href="@{/admin/attendance}" class="action-btn">
+                <i class="bi bi-calendar2-check"></i>
+                View Attendance Log
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a th:href="@{/admin/payments}" class="action-btn">
+                <i class="bi bi-currency-dollar"></i>
+                View Payment History
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
