@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin/payments")
@@ -23,47 +22,44 @@ public class PaymentController {
         this.userRepository = userRepository;
     }
 
-    // 1. Payment History (ගෙවීම් ඉතිහාසය පෙන්වීම)
+    // 1. Payment List (ඉතිහාසය පෙන්වීම)
     @GetMapping
     public String listPayments(Model model) {
-        List<Payment> payments = paymentRepository.findAll();
-        model.addAttribute("payments", payments);
-        return "admin-payments"; // මේ HTML එක අපි ඊළඟට හදමු
+        model.addAttribute("payments", paymentRepository.findAll());
+        return "admin-payments";
     }
 
-    // 2. Add Payment Form (ගෙවීම් කරන ෆෝම් එක පෙන්වීම)
+    // 2. Add Payment Form (ගෙවීම් පිටුවට යාම)
     @GetMapping("/add/{userId}")
     public String showAddPaymentForm(@PathVariable Long userId, Model model) {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
             Payment payment = new Payment();
-            payment.setUser(user); // අදාල User ව Payment එකට සෙට් කරනවා
+            payment.setUser(user);
             model.addAttribute("payment", payment);
             model.addAttribute("user", user);
-            return "admin-payment-add"; // මේ HTML එකත් අපි හදමු
+            return "admin-payment-add";
         }
         return "redirect:/admin/users";
     }
 
-    // 3. Save Payment (ගෙවීම සේව් කිරීම)
+    // 3. Save Payment (සල්ලි ගෙවීම සේව් කිරීම)
     @PostMapping("/save")
     public String savePayment(@ModelAttribute Payment payment, @RequestParam("userId") Long userId) {
         User user = userRepository.findById(userId).orElse(null);
-
         if (user != null) {
             payment.setUser(user);
-            payment.setDate(LocalDate.now()); // අද දිනය දානවා
-
-            // මාසය සෙට් කරනවා (Dashboard එකට ඕන නිසා)
+            payment.setDate(LocalDate.now());
+            // මාසය සෙට් කිරීම (Dashboard එකට)
             String currentMonth = LocalDate.now().getMonth().toString() + " " + LocalDate.now().getYear();
             payment.setMonth(currentMonth);
 
             paymentRepository.save(payment);
         }
-        return "redirect:/admin/users?paymentSuccess";
+        return "redirect:/admin/payments?success";
     }
 
-    // 4. Delete Payment (වැරදි ගෙවීමක් මකන්න ඕන නම්)
+    // 4. Delete Payment (ගෙවීමක් මකා දැමීම)
     @GetMapping("/delete/{id}")
     public String deletePayment(@PathVariable Long id) {
         paymentRepository.deleteById(id);

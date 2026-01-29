@@ -24,37 +24,30 @@ public class CheckInController {
         this.attendanceRepository = attendanceRepository;
     }
 
-    // 1. Check-In පිටුව පෙන්වීම
+    // Check-in පිටුව පෙන්වීම
     @GetMapping("/checkin")
     public String showCheckInPage() {
-        return "checkin"; // checkin.html පිටුව
+        return "checkin";
     }
 
-    // 2. Attendance Mark කිරීම (Phone Number හෝ Username මගින්)
+    // Attendance මාක් කිරීම
     @PostMapping("/checkin/mark")
-    public String markAttendance(@RequestParam("identifier") String identifier, Model model) {
-
-        // මුලින්ම Phone Number එකෙන් බලනවා
+    public String markAttendance(@RequestParam("identifier") String identifier) {
+        // Phone Number එකෙන් හෝ Username එකෙන් User ව හොයනවා
         User user = userRepository.findByPhoneNumber(identifier).orElse(null);
-
-        // Phone Number එකෙන් හම්බුනේ නැත්නම්, Username එකෙන් බලනවා
         if (user == null) {
             user = userRepository.findByUsername(identifier).orElse(null);
         }
 
         if (user != null) {
-            // User ඉන්නවා නම් Attendance දානවා
             Attendance attendance = new Attendance();
             attendance.setUser(user);
             attendance.setDate(LocalDate.now());
             attendance.setTime(LocalTime.now());
-
             attendanceRepository.save(attendance);
-
-            return "redirect:/checkin?success";
-        } else {
-            // User කෙනෙක් නෑ
-            return "redirect:/checkin?error";
+            // සාර්ථක නම් නම පෙන්වන්න ID එකත් යවනවා (Optional)
+            return "redirect:/checkin?success&name=" + user.getUsername();
         }
+        return "redirect:/checkin?error";
     }
 }
