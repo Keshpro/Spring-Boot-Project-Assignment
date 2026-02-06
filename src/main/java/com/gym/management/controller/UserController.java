@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class UserController {
 
     private final UserRepository userRepository;
-    private final PaymentRepository paymentRepository; // මෙය අලුතින් එකතු කළා
+//    private final PaymentRepository paymentRepository;
 
     // Constructor එක හරහා Repository දෙකම සම්බන්ධ කිරීම
     public UserController(UserRepository userRepository, PaymentRepository paymentRepository) {
@@ -36,16 +36,14 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("attendanceCount", 12); // පසුව හදමු
 
-            // --- FIXED PAYMENT LOGIC (Date Range Method) ---
+
             LocalDate today = LocalDate.now();
 
-            // මේ මාසයේ පළමු දිනය (උදා: 2024-01-01)
+
             LocalDate startDate = today.withDayOfMonth(1);
 
-            // මේ මාසයේ අන්තිම දිනය (උදා: 2024-01-31)
             LocalDate endDate = today.withDayOfMonth(today.lengthOfMonth());
-
-            // දැන් බලනවා මේ දින දෙක අතරතුර Payment එකක් තියෙනවද කියලා
+            
             boolean isPaid = paymentRepository.existsByUserAndDateBetween(user, startDate, endDate);
 
             if (isPaid) {

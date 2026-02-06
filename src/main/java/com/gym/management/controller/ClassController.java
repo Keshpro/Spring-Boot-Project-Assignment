@@ -18,7 +18,7 @@ public class ClassController {
         this.classRepository = classRepository;
     }
 
-    // 1. List Classes (ඔක්කොම පන්ති පෙන්වීම)
+    // 1. List Classes
     @GetMapping
     public String listClasses(Model model) {
         List<GymClass> classes = classRepository.findAll();
@@ -26,18 +26,18 @@ public class ClassController {
         return "admin-classes";
     }
 
-    // 2. Add Class Form (මේ කොටස අනිවාර්යයෙන්ම තියෙන්න ඕන)
+    // 2. Add Class Form
     @GetMapping("/add")
     public String showAddClassForm(Model model) {
         model.addAttribute("gymClass", new GymClass());
         return "admin-class-add";
     }
 
-    // 3. Save Class (Date එකේ T අකුර අයින් කරලා Save කරන තැන)
+    // 3. Save Class
     @PostMapping("/save")
     public String saveClass(@ModelAttribute GymClass gymClass) {
 
-        // Date Format Fix (මැදට එන 'T' අකුර අයින් කරලා Space එකක් දානවා)
+        // Date Format Fix
         if (gymClass.getSchedule() != null) {
             String formattedDate = gymClass.getSchedule().replace("T", " ");
             gymClass.setSchedule(formattedDate);

@@ -24,16 +24,16 @@ public class CheckInController {
         this.attendanceRepository = attendanceRepository;
     }
 
-    // Check-in පිටුව පෙන්වීම
+    // Check-in
     @GetMapping("/checkin")
     public String showCheckInPage() {
         return "checkin";
     }
 
-    // Attendance මාක් කිරීම
+    // Attendance mark
     @PostMapping("/checkin/mark")
     public String markAttendance(@RequestParam("identifier") String identifier) {
-        // Phone Number එකෙන් හෝ Username එකෙන් User ව හොයනවා
+        // Phone Number or Username search by User
         User user = userRepository.findByPhoneNumber(identifier).orElse(null);
         if (user == null) {
             user = userRepository.findByUsername(identifier).orElse(null);
@@ -45,7 +45,6 @@ public class CheckInController {
             attendance.setDate(LocalDate.now());
             attendance.setTime(LocalTime.now());
             attendanceRepository.save(attendance);
-            // සාර්ථක නම් නම පෙන්වන්න ID එකත් යවනවා (Optional)
             return "redirect:/checkin?success&name=" + user.getUsername();
         }
         return "redirect:/checkin?error";

@@ -22,14 +22,14 @@ public class PaymentController {
         this.userRepository = userRepository;
     }
 
-    // 1. Payment List (ඉතිහාසය පෙන්වීම)
+    // 1. Payment List
     @GetMapping
     public String listPayments(Model model) {
         model.addAttribute("payments", paymentRepository.findAll());
         return "admin-payments";
     }
 
-    // 2. Add Payment Form (ගෙවීම් පිටුවට යාම)
+    // 2. Add Payment Form
     @GetMapping("/add/{userId}")
     public String showAddPaymentForm(@PathVariable Long userId, Model model) {
         User user = userRepository.findById(userId).orElse(null);
@@ -43,14 +43,13 @@ public class PaymentController {
         return "redirect:/admin/users";
     }
 
-    // 3. Save Payment (සල්ලි ගෙවීම සේව් කිරීම)
+    // 3. Save Payment
     @PostMapping("/save")
     public String savePayment(@ModelAttribute Payment payment, @RequestParam("userId") Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
             payment.setUser(user);
             payment.setDate(LocalDate.now());
-            // මාසය සෙට් කිරීම (Dashboard එකට)
             String currentMonth = LocalDate.now().getMonth().toString() + " " + LocalDate.now().getYear();
             payment.setMonth(currentMonth);
 
@@ -59,7 +58,7 @@ public class PaymentController {
         return "redirect:/admin/payments?success";
     }
 
-    // 4. Delete Payment (ගෙවීමක් මකා දැමීම)
+    // 4. Delete Payment
     @GetMapping("/delete/{id}")
     public String deletePayment(@PathVariable Long id) {
         paymentRepository.deleteById(id);

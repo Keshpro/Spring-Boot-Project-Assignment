@@ -75,11 +75,10 @@ public class AdminController {
         userRepository.deleteById(id);
         return "redirect:/admin/users?deleted";
     }
-    // ... කලින් තියෙන කෝඩ් ...
 
     @GetMapping("/attendance")
     public String viewAttendance(@RequestParam(required = false) LocalDate date, Model model) {
-        // දවසක් තෝරලා නැත්නම් අද දවස ගන්න
+
         if (date == null) {
             date = LocalDate.now();
         }
@@ -87,16 +86,15 @@ public class AdminController {
         model.addAttribute("selectedDate", date);
         model.addAttribute("attendanceList", attendanceRepository.findByDateOrderByTimeDesc(date));
 
-        return "admin-attendance"; // අලුත් HTML පිටුව
+        return "admin-attendance";
     }
 
-    // User කෙනෙක්ගේ සම්පූර්ණ විස්තර බැලීම
     @GetMapping("/users/view/{id}")
     public String viewUserDetails(@PathVariable Long id, Model model) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
             model.addAttribute("user", user);
-            return "admin-user-view"; // අලුත් HTML පිටුව
+            return "admin-user-view";
         }
         return "redirect:/admin/users";
     }
